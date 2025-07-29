@@ -47,19 +47,17 @@ def create_sklearn_k_fold_splits(filenames, k=10, val_ratio=0.1, test_ratio=0.1)
 
         train_set, val_set = train_test_split(
             train_val_set,
-            test_size=val_size_from_remaining, # This is the crucial part for val split
-            random_state=42 # Keep reproducibility for this split too
+            test_size=val_size_from_remaining,
+            random_state=42
         )
         
         all_folds_data.append({
-            'train': train_set.tolist(),
-            'val': val_set.tolist(),
-            'test': test_set.tolist()
+            'train': np.sort(train_set).tolist(),
+            'val': np.sort(val_set).tolist(),
+            'test': np.sort(test_set).tolist()
         })
 
     return all_folds_data
-
-
 
 
 datasets = [{'name': 'FDCSR',
@@ -86,7 +84,7 @@ for dataset in datasets:
     
     data_fname_list = [os.path.basename(x) for x in sorted(glob.glob(os.path.join(data_root, '*.npz')))]
     
-    folds_data = create_sklearn_k_fold_splits(data_fname_list)
+    folds_data = create_sklearn_k_fold_splits(data_fname_list,k=5)
     
     print(folds_data)
     
