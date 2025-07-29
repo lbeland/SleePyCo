@@ -26,7 +26,7 @@ class EEGDataLoader(Dataset):
         
         self.training_mode = config['training_params']['mode']
 
-        self.dataset_path = os.path.join(self.root_dir, 'dset', self.dset_name, 'npz')
+        self.dataset_path = os.path.join(self.root_dir, 'npz')
         self.inputs, self.labels, self.epochs = self.split_dataset()
         
         if self.training_mode == 'pretrain':
@@ -79,6 +79,7 @@ class EEGDataLoader(Dataset):
         inputs, labels, epochs = [], [], []
         data_root = os.path.join(self.dataset_path, self.eeg_channel)
         data_fname_list = [os.path.basename(x) for x in sorted(glob.glob(os.path.join(data_root, '*.npz')))]
+        print(f"Found n data files: {len(data_fname_list)}")
         data_fname_dict = {'train': [], 'test': [], 'val': []}
         split_idx_list = np.load(os.path.join('./split_idx', 'idx_{}.npy'.format(self.dset_name)), allow_pickle=True)
 
@@ -104,6 +105,10 @@ class EEGDataLoader(Dataset):
             for i in range(len(data_fname_list)):
                 if i in split_idx_list[self.fold - 1][self.set]:
                     data_fname_dict[self.set].append(data_fname_list[i])
+        elif self.dset_name in ['FDCSR','SOF','DCSM','HMC']:
+            for i in range(len(data_fname_list)):
+                if i in split_idx_list[self.fold - 1][self.set]:
+                    data_fname_dict[self.set].append(data_fname_list[i])       
         else:
             raise NameError("dataset '{}' cannot be found.".format(self.dataset))
             
