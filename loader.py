@@ -26,7 +26,7 @@ class EEGDataLoader(Dataset):
         
         self.training_mode = config['training_params']['mode']
 
-        self.dataset_path = os.path.join(self.root_dir, 'npz')
+        self.dataset_path = os.path.join(self.root_dir,'dset', self.dset_name, 'npz')
         self.inputs, self.labels, self.epochs = self.split_dataset()
         
         if self.training_mode == 'pretrain':
