@@ -6,7 +6,7 @@
         "seq_len": 10,
         "target_idx": -1,
 
-        "root_dir": "/media/linda/Elements/sleep_data/DCSM - Danish Center of Sleep Medicine/DCSM_harmonized/100Hz/"
+        "root_dir": "./"
     },
 
     "backbone": {
