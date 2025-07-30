@@ -31,7 +31,7 @@ def create_sklearn_k_fold_splits(filenames, k=10, val_ratio=0.1, test_ratio=0.1)
 
     # KFold provides (train_indices, test_indices) where test_indices represent 1/k of the data
     for fold_idx, (train_val_indices, test_indices) in enumerate(kf.split(orig_indices)):
-        # The 'test_indices' here will be our final test set for this fold (approx 10% of total)
+        # The 'test_indices' here will be our final test set for this fold
         test_set = orig_indices[test_indices]
 
         # The 'train_val_indices' represent the remaining (k-1)/k of the data (approx 90% of total)
@@ -60,28 +60,43 @@ def create_sklearn_k_fold_splits(filenames, k=10, val_ratio=0.1, test_ratio=0.1)
     return all_folds_data
 
 
-datasets = [{'name': 'FDCSR',
-             'path':'/media/linda/Elements/sleep_data/FDCSR - Forced Desynchrony with and without Chronic Sleep Restriction /FDCSR_harmonized/100Hz/',
-             'channel':'C4'     
-             },
+datasets = [
             {'name': 'SOF',
-             'path':'/media/linda/Elements/sleep_data/SOF - Study of Osteoporotic Fractures/SOF_harmonized/100Hz',
              'channel': 'C4'
             },
             {'name': 'DCSM',
-             'path':'/media/linda/Elements/sleep_data/DCSM - Danish Center of Sleep Medicine/DCSM_harmonized/100Hz',
              'channel': 'C4-M1'
             },
             {'name': 'HMC',
-            'path':'/media/linda/Elements/sleep_data/HMC - Haaglanden Medisch Centrum sleep staging database/HMC_harmonized/100Hz',
-            'channel': 'EEG_C4-M1'
-            }
+             'channel': 'EEG_C4-M1'
+            },
+            {'name': 'MSP',
+             'channel': 'C4_M1'
+            },
+            {'name': 'DOD-H',
+             'channel': 'C3_M2'
+            },
+            {'name': 'DOD-O',
+             'channel': 'C4_M1'
+            },
+            {'name': 'CFS',
+             'channel': 'C4'
+            },
+            {'name': 'ISRUC',
+             'channel': 'C4_M1'
+            },
+            {'name': 'APPLES',
+             'channel': 'C4_M1'
+            },
+            {'name': 'FDCSR',
+            'channel':'C4'     
+            },
     ]                    
                 
 for dataset in datasets:
     print(f'Splitting {dataset['name']} dataset...')
-    data_root = os.path.join(dataset['path'], 'npz', dataset['channel']) 
-    
+    data_root = os.path.join('./dset', dataset['name'], 'npz', dataset['channel']) 
+    print(data_root)
     data_fname_list = [os.path.basename(x) for x in sorted(glob.glob(os.path.join(data_root, '*.npz')))]
     
     folds_data = create_sklearn_k_fold_splits(data_fname_list,k=5)
